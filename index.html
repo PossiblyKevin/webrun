@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A browser-based website playground for previewing pasted code, uploaded website files, and embeddable URLs.">
+  <title>Web Runner</title>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">W</span><div><strong>Web Runner</strong><small>Browser-based website playground</small></div></div>
+    <div class="top-actions">
+      <button id="runBtn" class="primary">▶ Run preview</button>
+      <button id="downloadBtn">Download HTML</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="workspace">
+      <div class="panel-heading">
+        <div><span class="eyebrow">WORKSPACE</span><h1>Build and preview</h1></div>
+        <span id="status" class="status">Ready</span>
+      </div>
+
+      <nav class="tabs" aria-label="Input methods">
+        <button class="tab active" data-tab="code">Paste code</button>
+        <button class="tab" data-tab="files">Upload files</button>
+        <button class="tab" data-tab="url">Website URL</button>
+      </nav>
+
+      <section class="tab-panel active" id="tab-code">
+        <div class="field-label"><label for="htmlCode">HTML</label><span>Required for a complete page</span></div>
+        <textarea id="htmlCode" spellcheck="false" aria-label="HTML source code" placeholder="Paste a full HTML document here…"><!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>My test page</title>
+</head>
+<body>
+  <main>
+    <h1>Hello, world!</h1>
+    <p>Paste or upload a website, then run it here.</p>
+    <button onclick="document.querySelector('p').textContent = 'JavaScript is working!'">Test JavaScript</button>
+  </main>
+</body>
+</html></textarea>
+        <details class="code-extras">
+          <summary>Optional separate CSS and JavaScript</summary>
+          <div class="field-label"><label for="cssCode">CSS</label><span>Added to the page</span></div>
+          <textarea id="cssCode" class="short-code" spellcheck="false" placeholder="body { font-family: sans-serif; }"></textarea>
+          <div class="field-label"><label for="jsCode">JavaScript</label><span>Runs in the preview frame</span></div>
+          <textarea id="jsCode" class="short-code" spellcheck="false" placeholder="console.log('Hello from the runner');"></textarea>
+        </details>
+      </section>
+
+      <section class="tab-panel" id="tab-files">
+        <div class="dropzone" id="dropzone">
+          <div class="upload-icon">↑</div>
+          <h2>Import website files</h2>
+          <p>Choose or drag in HTML, CSS, JS, images, or a ZIP of a static site.</p>
+          <label class="file-button" for="fileInput">Choose files</label>
+          <input id="fileInput" type="file" multiple accept=".html,.htm,.css,.js,.mjs,.json,.txt,.svg,.png,.jpg,.jpeg,.gif,.webp,.ico,.woff,.woff2,.ttf,.zip">
+          <p class="muted">ZIP support uses JSZip from a public CDN. Keep your files together in one folder for relative assets.</p>
+        </div>
+        <div id="fileList" class="file-list"><p class="muted">No files imported yet.</p></div>
+        <div class="file-actions"><button id="loadFilesBtn" class="primary" disabled>Load imported files</button><button id="clearFilesBtn">Clear files</button></div>
+      </section>
+
+      <section class="tab-panel" id="tab-url">
+        <div class="field-label"><label for="urlInput">Website address</label></div>
+        <div class="url-row"><input id="urlInput" type="url" placeholder="https://example.com"><button id="openUrlBtn" class="primary">Open URL</button></div>
+        <p class="notice"><strong>URL preview is not source import.</strong> Many sites block embedding, and browsers prevent this page from reading another site's source unless that site permits it with CORS. If a URL cannot be shown here, open it in a new tab or download the site's files and upload them.</p>
+        <button id="newTabBtn">Open URL in a new tab ↗</button>
+      </section>
+      <div class="workspace-footer">
+        <span>Runs locally in your browser</span><span>HTML · CSS · JavaScript · static files</span>
+      </div>
+    </section>
+
+    <section class="preview-panel">
+      <div class="preview-heading"><div><span class="eyebrow">OUTPUT</span><h2>Live preview</h2></div><div class="preview-actions"><button id="refreshBtn" title="Refresh preview">↻ Refresh</button><button id="popoutBtn" title="Open preview in a new tab">↗ Pop out</button></div></div>
+      <div class="browser-bar"><span class="traffic"><i></i><i></i><i></i></span><span id="previewAddress">runner://preview</span><span class="secure">Sandboxed</span></div>
+      <div id="previewWrap" class="preview-wrap"><iframe id="preview" title="Website preview" sandbox="allow-scripts allow-forms allow-modals allow-downloads" referrerpolicy="no-referrer"></iframe></div>
+      <div class="preview-foot"><span class="live-dot"></span><span id="previewMessage">Preview is ready to run.</span></div>
+    </section>
+  </main>
+  <footer class="site-footer">Web Runner is a static playground, not a full hosting environment. See README for security and compatibility limits.</footer>
+</body>
+</html>
